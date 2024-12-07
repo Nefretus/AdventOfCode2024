@@ -31,7 +31,9 @@ impl Direction {
 
 fn main() {
 
-    let solve_part2 = false;
+    let solve_part2 = true;
+    use std::time::Instant;
+    let now = Instant::now();
 
     let input = fs::read_to_string("input.txt").expect("Failed to read input file");
     let map: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
@@ -120,6 +122,8 @@ fn main() {
             "Number of valid obstruction positions: {}",
             valid_obstructions.len()
         );
+        let elapsed = now.elapsed();
+        println!("Elapsed: {:.2?}", elapsed);
     }
 
 }
