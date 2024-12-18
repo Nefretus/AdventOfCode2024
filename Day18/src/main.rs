@@ -1,21 +1,14 @@
-use std::cmp::Reverse;
-use std::collections::{BinaryHeap, HashMap, HashSet};
+use std::collections::{HashMap, HashSet, VecDeque};
 use std::fs;
 use std::io;
 
 const DIRECTIONS: [(isize, isize); 4] = [(-1, 0), (0, 1), (1, 0), (0, -1)];
 
-#[derive(Debug)]
-struct Edge {
-    node: (usize, usize),
-    weight: u32,
-}
-
 fn generate_graph(
     restricted_coords: &HashSet<(usize, usize)>,
     width: usize,
     height: usize,
-) -> HashMap<(usize, usize), Vec<Edge>> {
+) -> HashMap<(usize, usize), Vec<(usize, usize)>> {
     let mut graph = HashMap::new();
     let rows = height;
     let cols = width;
@@ -40,10 +33,7 @@ fn generate_graph(
                     let new_col = new_col as usize;
 
                     if !restricted_coords.contains(&(new_row, new_col)) {
-                        neighbors.push(Edge {
-                            node: (new_row, new_col),
-                            weight: 1,
-                        });
+                        neighbors.push((new_row, new_col));
                     }
                 }
             }
@@ -53,37 +43,31 @@ fn generate_graph(
     graph
 }
 
-fn dijkstra(
-    graph: &HashMap<(usize, usize), Vec<Edge>>,
+fn bfs(
+    graph: &HashMap<(usize, usize), Vec<(usize, usize)>>,
     start: (usize, usize),
     end: (usize, usize),
 ) -> Option<u32> {
-    let mut distances: HashMap<(usize, usize), u32> = HashMap::new();
-    let mut heap = BinaryHeap::new();
+    let mut queue = VecDeque::new();
     let mut visited = HashSet::new();
+    let mut distances = HashMap::new();
 
+    queue.push_back(start);
+    visited.insert(start);
     distances.insert(start, 0);
-    heap.push(Reverse((0, start)));
 
-    while let Some(Reverse((current_distance, current_node))) = heap.pop() {
-        let (row, col) = current_node;
+    while let Some(current) = queue.pop_front() {
+        let current_distance = distances[&current];
 
-        if (row, col) == end {
+        if current == end {
             return Some(current_distance);
         }
 
-        if !visited.insert(current_node) {
-            continue;
-        }
-
-        if let Some(neighbors) = graph.get(&current_node) {
-            for edge in neighbors {
-                let next_node = edge.node;
-                let next_distance = current_distance + edge.weight;
-
-                if next_distance < *distances.get(&next_node).unwrap_or(&u32::MAX) {
-                    distances.insert(next_node, next_distance);
-                    heap.push(Reverse((next_distance, next_node)));
+        if let Some(neighbors) = graph.get(&current) {
+            for &neighbor in neighbors {
+                if visited.insert(neighbor) {
+                    distances.insert(neighbor, current_distance + 1);
+                    queue.push_back(neighbor);
                 }
             }
         }
@@ -110,7 +94,7 @@ fn solve_part1() {
 
     let graph = generate_graph(&restricted_coords, width, height);
 
-    if let Some(distance) = dijkstra(&graph, start, end) {
+    if let Some(distance) = bfs(&graph, start, end) {
         println!("Shortest path distance: {}", distance);
     } else {
         println!("No path found.");
@@ -125,7 +109,7 @@ fn graph_connected(restricted_coords: HashSet<(usize, usize)>) -> bool {
 
     let graph = generate_graph(&restricted_coords, width, height);
 
-    dijkstra(&graph, start, end).is_some()
+    bfs(&graph, start, end).is_some()
 }
 
 fn solve_part2() {
