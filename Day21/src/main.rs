@@ -105,12 +105,12 @@ fn get_solutions(code: &Vec<char>, seqs: &HashMap<(char, char), Vec<Vec<char>>>)
         .collect()
 }
 
-fn compute(
-    code: &Vec<char>,
+fn compute<'a>(
+    code: &'a Vec<char>,
     depth: usize,
-    dir_seqs: &HashMap<(char, char), Vec<Vec<char>>>,
+    dir_seqs: &'a HashMap<(char, char), Vec<Vec<char>>>,
     dir_lengths: &HashMap<(char, char), usize>,
-    cache: &mut HashMap<(Vec<char>, usize), usize>,
+    cache: &mut HashMap<(&'a Vec<char>, usize), usize>,
 ) -> usize {
     if depth == 1 {
         return convert_code_into_pairs(code)
@@ -119,7 +119,7 @@ fn compute(
             .sum();
     }
 
-    if let Some(&len) = cache.get(&(code.to_vec(), depth)) {
+    if let Some(&len) = cache.get(&(code, depth)) {
         return len;
     }
 
@@ -134,7 +134,7 @@ fn compute(
             .unwrap_or(0);
     }
 
-    cache.insert((code.to_vec(), depth), len);
+    cache.insert((code, depth), len);
     len
 }
 
@@ -149,10 +149,10 @@ fn solve(
         .map(|(movement, paths)| (*movement, paths[0].len()))
         .collect();
 
-    let mut cache: HashMap<(Vec<char>, usize), usize> = HashMap::new();
     let mut total_complexity = 0;
 
     for line in input.lines() {
+        let mut cache: HashMap<(&Vec<char>, usize), usize> = HashMap::new();
         let line_chr: Vec<char> = line.chars().collect();
         let min_solution = get_solutions(&line_chr, &num_combinations)
             .iter()

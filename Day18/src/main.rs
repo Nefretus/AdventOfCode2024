@@ -40,6 +40,7 @@ fn generate_graph(
             graph.insert((row, col), neighbors);
         }
     }
+    
     graph
 }
 

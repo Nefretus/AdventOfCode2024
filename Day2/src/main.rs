@@ -1,7 +1,6 @@
 use std::{
     fs::File,
     io::{BufRead, BufReader},
-    ops::ControlFlow,
 };
 
 #[derive(Debug)]
@@ -46,7 +45,7 @@ fn verify(v: &[i32]) -> Option<()> {
     Some(())
 }
 
-fn solve_part1_and_part2(input: &[Vec<i32>], solve_part2: bool) -> u32 {
+fn solve(input: &[Vec<i32>], solve_part2: bool) -> u32 {
     let mut valid_levels = 0;
 
     for v in input {
@@ -55,7 +54,6 @@ fn solve_part1_and_part2(input: &[Vec<i32>], solve_part2: bool) -> u32 {
                 valid_levels += 1;
             }
             None if solve_part2 => {
-                // Problem Dampener: Try removing one element
                 if (0..v.len()).any(|skip_idx| {
                     let modified = v
                         .iter()
@@ -75,8 +73,6 @@ fn solve_part1_and_part2(input: &[Vec<i32>], solve_part2: bool) -> u32 {
 }
 
 fn main() -> std::io::Result<()> {
-    let solve_part2 = true;
-
     let reader = BufReader::new(File::open("input.txt")?);
     let input: Vec<Vec<i32>> = reader
         .lines()
@@ -88,8 +84,8 @@ fn main() -> std::io::Result<()> {
         })
         .collect();
 
-    let valid_levels = solve_part1_and_part2(&input, solve_part2);
+    println!("Part1 solution: {}", solve(&input, false));
+    println!("Part2 solution: {}", solve(&input, true));
 
-    println!("Valid levels: {}", valid_levels);
     Ok(())
 }

@@ -35,7 +35,7 @@ fn main() -> std::io::Result<()> {
                     temp_stack.push(next_line.to_string());
                     it.next();
                 }
-                for (line_nr, stacked_line) in temp_stack.iter().enumerate().rev() {
+                for stacked_line in temp_stack.iter().rev() {
                     for (i, c) in stacked_line.chars().enumerate() {
                         if c == '#' {
                             key[i] += 1;
@@ -57,5 +57,6 @@ fn main() -> std::io::Result<()> {
     }
 
     println!("Total compatible lock/key pairs: {}", count);
+
     Ok(())
 }

@@ -5,10 +5,12 @@ fn build_graph(input: &str) -> HashMap<&str, HashSet<&str>> {
 
     input.lines().for_each(|line| {
         let parts: Vec<_> = line.trim().split('-').collect();
-        graph.entry(parts[0])
+        graph
+            .entry(parts[0])
             .or_insert_with(HashSet::new)
             .insert(parts[1]);
-        graph.entry(parts[1])
+        graph
+            .entry(parts[1])
             .or_insert_with(HashSet::new)
             .insert(parts[0]);
     });
@@ -23,7 +25,8 @@ fn solve_part1(graph: &HashMap<&str, HashSet<&str>>) {
         for &node2 in neighbors1 {
             if let Some(neighbors2) = graph.get(node2) {
                 for &node3 in neighbors2 {
-                    if node1 != node3 && graph.get(node3).unwrap_or(&HashSet::new()).contains(node1) {
+                    if node1 != node3 && graph.get(node3).unwrap_or(&HashSet::new()).contains(node1)
+                    {
                         let mut group = vec![node1, node2, node3];
                         group.sort();
                         if group.iter().any(|&node| node.starts_with('t')) {
@@ -38,7 +41,12 @@ fn solve_part1(graph: &HashMap<&str, HashSet<&str>>) {
     println!("Count of unique triplets: {}", conn_computers.len());
 }
 
-fn find_connections<'a>(node: &str, curr_group: &mut HashSet<&'a str>, groups: &mut HashSet<Vec<&'a str>>, graph: &HashMap<&'a str, HashSet<&'a str>>) {
+fn find_connections<'a>(
+    node: &str,
+    curr_group: &mut HashSet<&'a str>,
+    groups: &mut HashSet<Vec<&'a str>>,
+    graph: &HashMap<&'a str, HashSet<&'a str>>,
+) {
     let mut sorted: Vec<&str> = curr_group.iter().cloned().collect();
     sorted.sort();
     if groups.contains(&sorted) {
@@ -48,9 +56,12 @@ fn find_connections<'a>(node: &str, curr_group: &mut HashSet<&'a str>, groups: &
     if let Some(neighbors) = graph.get(node) {
         for neighbor in neighbors {
             if *neighbor == node {
-                continue; 
+                continue;
             }
-            if !curr_group.iter().all(|x| graph.get(neighbor).unwrap_or(&HashSet::new()).contains(x)) {
+            if !curr_group
+                .iter()
+                .all(|x| graph.get(neighbor).unwrap_or(&HashSet::new()).contains(x))
+            {
                 continue;
             }
             if !curr_group.contains(neighbor) {
@@ -70,9 +81,9 @@ fn solve_part2(graph: &HashMap<&str, HashSet<&str>>) {
         curr_group.insert(node);
         find_connections(node, &mut curr_group, &mut groups, graph);
     }
-    
+
     if let Some(largest_group) = groups.iter().max_by_key(|group| group.len()) {
-        println!("{:?}", largest_group.join(","));
+        println!("LAN party password: {:?}", largest_group.join(","));
     }
 }
 

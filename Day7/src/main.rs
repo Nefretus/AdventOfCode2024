@@ -11,7 +11,7 @@ fn concat(a: u64, b: u64) -> u64 {
     result * multiplier + b
 }
 
-fn can_produce_target(numbers: &[u64], target: u64, solve_part2: &bool) -> bool {
+fn can_produce_target(numbers: &[u64], target: u64, include_concat: bool) -> bool {
     let mut dp: HashSet<u64> = HashSet::new();
     dp.insert(numbers[0]); 
 
@@ -20,7 +20,7 @@ fn can_produce_target(numbers: &[u64], target: u64, solve_part2: &bool) -> bool 
         for &value in &dp {
             next_dp.insert(value + num);
             next_dp.insert(value * num);
-            if *solve_part2 {
+            if include_concat {
                 next_dp.insert(concat(value, num));
             }
         }
@@ -30,12 +30,8 @@ fn can_produce_target(numbers: &[u64], target: u64, solve_part2: &bool) -> bool 
     dp.contains(&target) 
 }
 
-fn main() -> io::Result<()>{
-    let solve_part2 = false;
-
+fn solve(input: &str, include_concat: bool) -> u64 {
     let mut total_calibration_result = 0;
-    let mut input = String::new();
-    File::open("input.txt")?.read_to_string(&mut input)?;
 
     for line in input.lines().filter(|l| !l.trim().is_empty()) {
         let parts: Vec<&str> = line.split(':').collect();
@@ -47,12 +43,20 @@ fn main() -> io::Result<()>{
             .map(|n| n.parse().expect("Invalid number"))
             .collect();
 
-        if can_produce_target(&numbers, target, &solve_part2) {
+        if can_produce_target(&numbers, target, include_concat) {
             total_calibration_result += target;
         }
     }
 
-    println!("Total calibration result: {}", total_calibration_result);
+    total_calibration_result
+}
+
+fn main() -> io::Result<()>{
+    let mut input = String::new();
+    File::open("input.txt")?.read_to_string(&mut input)?;
+
+    println!("Part1 solution: {}", solve(&input, false));
+    println!("Part2 solution: {}", solve(&input, true));
 
     Ok(())
 }

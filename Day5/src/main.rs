@@ -2,14 +2,8 @@ use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{self, BufReader, Read};
 
-fn main() -> io::Result<()> {
-    let solve_part2 = true;
-    let input_file = "input.txt";
-    let mut input = String::new();
-
+fn process_input(input: &str) -> (HashMap<i32, HashSet<i32>>, HashSet<usize>, Vec<Vec<i32>>) {
     let mut rules: HashMap<i32, HashSet<i32>> = HashMap::new();
-    BufReader::new(File::open(input_file)?).read_to_string(&mut input)?;
-
     let mut pages_idx = 0;
 
     for (idx, line) in input.lines().enumerate() {
@@ -52,36 +46,56 @@ fn main() -> io::Result<()> {
         }
     }
 
-    if !solve_part2 {
-        let mut total_middle_sum = 0;
+    (rules, banned_pages_indices, updates)
+}
 
-        for (idx, page_list) in updates.iter().enumerate() {
-            if !banned_pages_indices.contains(&idx) {
-                total_middle_sum += page_list[page_list.len() / 2];
-            }
+fn solve_part1(banned_pages_indices: &HashSet<usize>, updates: &Vec<Vec<i32>>) {
+    let mut total_middle_sum = 0;
+
+    for (idx, page_list) in updates.iter().enumerate() {
+        if !banned_pages_indices.contains(&idx) {
+            total_middle_sum += page_list[page_list.len() / 2];
         }
-
-        println!("{}", total_middle_sum);
-    } else {
-        let mut total_middle_sum = 0;
-
-        for idx in banned_pages_indices {
-            let mut page_vec = updates[idx].clone();
-            page_vec.sort_by(|a, b| {
-                if rules.get(a).map_or(false, |rule| rule.contains(b)) {
-                    std::cmp::Ordering::Less
-                } else if rules.get(b).map_or(false, |rule| rule.contains(a)) {
-                    std::cmp::Ordering::Greater
-                } else {
-                    std::cmp::Ordering::Equal
-                }
-            });
-            
-            total_middle_sum += page_vec[page_vec.len() / 2];
-        }
-
-        println!("{}", total_middle_sum);
     }
+
+    println!("Part1 solution: {}", total_middle_sum);
+}
+
+fn solve_part2(
+    rules: &HashMap<i32, HashSet<i32>>,
+    banned_pages_indices: &HashSet<usize>,
+    updates: &Vec<Vec<i32>>,
+) {
+    let mut total_middle_sum = 0;
+
+    for idx in banned_pages_indices {
+        let mut page_vec = updates[*idx].clone();
+        page_vec.sort_by(|a, b| {
+            if rules.get(a).map_or(false, |rule| rule.contains(b)) {
+                std::cmp::Ordering::Less
+            } else if rules.get(b).map_or(false, |rule| rule.contains(a)) {
+                std::cmp::Ordering::Greater
+            } else {
+                std::cmp::Ordering::Equal
+            }
+        });
+
+        total_middle_sum += page_vec[page_vec.len() / 2];
+    }
+
+    println!("Part2 solution: {}", total_middle_sum);
+}
+
+fn main() -> io::Result<()> {
+    let input_file = "input.txt";
+    let mut input = String::new();
+
+    BufReader::new(File::open(input_file)?).read_to_string(&mut input)?;
+
+    let (rules, banned_pages_indices, updates) = process_input(&input);
+
+    solve_part1(&banned_pages_indices, &updates);
+    solve_part2(&rules, &banned_pages_indices, &updates);
 
     Ok(())
 }

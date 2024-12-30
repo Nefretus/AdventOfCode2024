@@ -12,10 +12,10 @@ fn solve_part1(values: &Vec<usize>) {
             expanded_list.extend(iter::repeat(FREE_SPACE).take(free_space));
         }
     }
-    
+
     let mut left = 0;
     let mut right = expanded_list.len() - 1;
-    
+
     while left <= right {
         if expanded_list[left] == FREE_SPACE {
             if expanded_list[right] == FREE_SPACE {
@@ -30,15 +30,15 @@ fn solve_part1(values: &Vec<usize>) {
             left += 1;
         }
     }
-    
-    let checksum: i64 = expanded_list
-    .iter()
-    .enumerate()
-    .filter(|&(_, &value)| value != FREE_SPACE)
-    .map(|(position, &value)| position as i64 * value as i64)
-    .sum();
 
-    println!("Final checksum: {}", checksum);
+    let checksum: i64 = expanded_list
+        .iter()
+        .enumerate()
+        .filter(|&(_, &value)| value != FREE_SPACE)
+        .map(|(position, &value)| position as i64 * value as i64)
+        .sum();
+
+    println!("Part1 checksum: {}", checksum);
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -47,7 +47,7 @@ struct FileDesc {
     file_size: usize,
     free_space: usize,
     current_left: usize,
-    moved: bool
+    moved: bool,
 }
 
 // this part2 is terrible, will be back with better approach
@@ -61,11 +61,11 @@ fn solve_part2(values: &Vec<usize>) {
             0
         };
         pairs.push(FileDesc {
-            id: i / 2, 
+            id: i / 2,
             file_size,
             free_space,
             current_left: if i != 0 { (i / 2) - 1 } else { usize::MAX },
-            moved: false
+            moved: false,
         });
     }
 
@@ -74,15 +74,15 @@ fn solve_part2(values: &Vec<usize>) {
         let mut left = 0;
         let right = last_e;
         let mut found_change = false;
- 
+
         while left < right {
             if pairs[left].free_space >= pairs[right].file_size && !pairs[right].moved {
-
                 for id_based_on_idx in 0..pairs.len() {
                     if pairs[id_based_on_idx].id == pairs[right].current_left {
-                        pairs[id_based_on_idx].free_space += pairs[right].file_size + pairs[right].free_space;
+                        pairs[id_based_on_idx].free_space +=
+                            pairs[right].file_size + pairs[right].free_space;
                     }
-                } 
+                }
 
                 pairs[right].free_space = pairs[left].free_space - pairs[right].file_size;
                 pairs[left].free_space = 0;
@@ -94,7 +94,7 @@ fn solve_part2(values: &Vec<usize>) {
                             if pairs[k].current_left == pairs[right].id {
                                 k_idx = k;
                             }
-                        } 
+                        }
 
                         pairs[k_idx].current_left = pairs[right].current_left;
                         pairs[j].current_left = pairs[right].id;
@@ -103,13 +103,13 @@ fn solve_part2(values: &Vec<usize>) {
                         pairs[right].moved = true;
                         let e = pairs.remove(right);
                         pairs.insert(j, e);
-                        
+
                         found_change = true;
                         break;
                     }
                 }
-                
-                break; 
+
+                break;
             } else {
                 left += 1;
             }
@@ -138,7 +138,7 @@ fn solve_part2(values: &Vec<usize>) {
         .map(|(position, &value)| position as i64 * value as i64)
         .sum();
 
-    println!("Final checksum: {}", checksum);
+    println!("Part2 checksum: {}", checksum);
 }
 
 fn main() -> io::Result<()> {
@@ -152,6 +152,6 @@ fn main() -> io::Result<()> {
 
     solve_part1(&values);
     solve_part2(&values);
-    
+
     Ok(())
 }

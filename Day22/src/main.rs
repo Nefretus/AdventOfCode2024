@@ -9,9 +9,9 @@ fn prune(secret_num: usize) -> usize {
 }
 
 fn produce_secret_num(secret_num: usize) -> usize {
-    let step1 = prune(mix(secret_num, secret_num * 64));
-    let step2 = prune(mix(step1, step1 / 32));
-    prune(mix(step2, step2 * 2048))
+    let mut step = prune(mix(secret_num, secret_num * 64));
+    step = prune(mix(step, step / 32));
+    prune(mix(step, step * 2048))
 }
 
 fn solve(input: &str, iterations: usize) {
@@ -19,7 +19,7 @@ fn solve(input: &str, iterations: usize) {
 
     let total_sum: usize = input
         .lines()
-        .filter_map(|line| line.trim().parse::<usize>().ok())   
+        .filter_map(|line| line.trim().parse::<usize>().ok())
         .map(|mut secret_num| {
             let mut visited = HashSet::new();
             let mut prices = Vec::with_capacity(iterations + 1);
@@ -49,7 +49,10 @@ fn solve(input: &str, iterations: usize) {
 
     let max_profit = seq_profit.values().max().unwrap_or(&0);
 
-    println!("Sum of secret nums after {} iterations: {}", iterations, total_sum);
+    println!(
+        "Sum of secret nums after {} iterations: {}",
+        iterations, total_sum
+    );
     println!("Bananas bought with the best sequence: {}", max_profit);
 }
 

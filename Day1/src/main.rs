@@ -13,7 +13,7 @@ fn solve_part1(mut left_list: Vec<u32>, mut right_list: Vec<u32>) {
         .zip(right_list.iter())
         .fold(0, |acc, (left, right)| acc + left.abs_diff(*right));
 
-    println!("{}", dist);
+    println!("Part1: {}", dist);
 }
 
 fn solve_part2(left_list: &Vec<u32>, right_list: &Vec<u32>) {
@@ -37,11 +37,11 @@ fn solve_part2(left_list: &Vec<u32>, right_list: &Vec<u32>) {
         }
     });
 
-    println!("{}", dist);
+    println!("Part2: {}", dist);
 }
 
 fn main() -> std::io::Result<()> {
-    let reader: BufReader<File> = BufReader::new(File::open("part1.txt")?);
+    let reader: BufReader<File> = BufReader::new(File::open("input.txt")?);
     let mut left_list = vec![];
     let mut right_list = vec![];
     reader.lines().filter_map(|x| x.ok()).for_each(|l| {
@@ -59,4 +59,3 @@ fn main() -> std::io::Result<()> {
 
     Ok(())
 }
-

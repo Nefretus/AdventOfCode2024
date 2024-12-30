@@ -19,12 +19,7 @@ fn find_route_part1(
     found_nines: &mut HashSet<Point>,
     current_height: u32,
 ) {
-    let directions: &[(i32, i32)] = &[
-        (-1, 0), 
-        (1, 0),  
-        (0, 1),  
-        (0, -1), 
-    ];
+    let directions: &[(i32, i32)] = &[(-1, 0), (1, 0), (0, 1), (0, -1)];
 
     if map[curr_pos.x][curr_pos.y] == END_NODE {
         found_nines.insert(*curr_pos);
@@ -58,12 +53,7 @@ fn find_route_part2(
     found_nines: &mut u32,
     current_height: u32,
 ) {
-    let directions: &[(i32, i32)] = &[
-        (-1, 0), 
-        (1, 0),  
-        (0, 1),  
-        (0, -1), 
-    ];
+    let directions: &[(i32, i32)] = &[(-1, 0), (1, 0), (0, 1), (0, -1)];
 
     if map[curr_pos.x][curr_pos.y] == END_NODE {
         *found_nines += 1;
@@ -103,7 +93,7 @@ fn solve_part1(input: &Vec<Vec<u32>>, start_positions: &Vec<Point>) {
         total_score += found_nines.len();
     }
 
-    println!("Total score of all trailheads: {}", total_score);
+    println!("Part1 score of all trailheads: {}", total_score);
 }
 
 fn solve_part2(input: &Vec<Vec<u32>>, start_positions: &Vec<Point>) {
@@ -119,7 +109,7 @@ fn solve_part2(input: &Vec<Vec<u32>>, start_positions: &Vec<Point>) {
         total_score += found_nines;
     }
 
-    println!("Total score of all trailheads: {}", total_score);
+    println!("Part2 score of all trailheads: {}", total_score);
 }
 
 fn main() -> io::Result<()> {

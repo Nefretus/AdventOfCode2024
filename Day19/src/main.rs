@@ -45,7 +45,7 @@ fn solve(towels: &Vec<&str>, patterns: &Vec<&str>) {
     }
 
     println!(
-        "Number of possible designs: {}\nNumber of possible combinations: {}",
+        "Part1 possible designs: {}\nPart2 possible combinations: {}",
         possible_count, total_combination_count
     );
 }

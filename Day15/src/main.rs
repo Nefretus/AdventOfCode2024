@@ -20,13 +20,6 @@ struct Point {
     y: usize,
 }
 
-fn display_grid(grid: &Vec<Vec<char>>) {
-    for row in grid {
-        println!("{}", row.iter().collect::<String>());
-    }
-    println!();
-}
-
 fn move_robot(grid: &mut Vec<Vec<char>>, curr_move: char, robot_pos: Point) -> Point {
     match curr_move {
         LEFT => {
@@ -165,7 +158,6 @@ fn solve_part1(grid: &mut Vec<Vec<char>>, moves: &Vec<char>) {
         for m in moves {
             robot_pos = move_robot(grid, *m, robot_pos);
         }
-        display_grid(grid);
         let mut gps_score = 0;
         grid.iter().enumerate().for_each(|(i, row)| {
             row.iter().enumerate().for_each(|(j, _)| {
@@ -174,7 +166,7 @@ fn solve_part1(grid: &mut Vec<Vec<char>>, moves: &Vec<char>) {
                 }
             });
         });
-        println!("Sum of GPS coords: {}", gps_score);
+        println!("Part1 sum of GPS coords: {}", gps_score);
     }
 }
 
@@ -475,7 +467,6 @@ fn solve_part2(grid: &mut Vec<Vec<char>>, moves: &Vec<char>) {
         for m in moves {
             robot_pos = move_robot_part2(grid, *m, robot_pos);
         }
-        display_grid(grid);
         let mut gps_score = 0;
         grid.iter().enumerate().for_each(|(i, row)| {
             row.iter().enumerate().for_each(|(j, _)| {
@@ -484,7 +475,7 @@ fn solve_part2(grid: &mut Vec<Vec<char>>, moves: &Vec<char>) {
                 }
             });
         });
-        println!("Part 1 sum of GPS coords: {}", gps_score);
+        println!("Part2 sum of GPS coords: {}", gps_score);
     }
 }
 

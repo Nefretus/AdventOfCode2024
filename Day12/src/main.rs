@@ -101,6 +101,7 @@ fn solve(garden: &Grid, plant: char) -> (u32, u32) {
                 if visited.contains(&current_pos) {
                     continue;
                 }
+                
                 visited.insert(current_pos);
                 area += 1;
 

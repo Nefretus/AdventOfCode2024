@@ -203,7 +203,7 @@ fn solve_part2(program: &Vec<Instruction>) {
     expected_output.reverse();
 
     println!(
-        "Part 2 register A value: {}",
+        "Part2 register A value: {}",
         find_register_value(0, 0, &program, &expected_output)
     );
 }

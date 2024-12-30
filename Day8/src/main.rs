@@ -1,5 +1,5 @@
 use std::collections::{HashMap, HashSet};
-use std::io::{self, Read};
+use std::io::{self};
 
 #[derive(Eq, Hash, PartialEq, Clone, Debug)]
 struct Point {
@@ -33,7 +33,7 @@ fn find_antinodes_part1(map_range: Point, antenna_locations: &HashSet<Point>) ->
                     }
                 }
                 if let Some(res_x) = left_point.x.checked_sub(dist_x) {
-                    if (high_point.y + dist_y < map_range.y) {
+                    if high_point.y + dist_y < map_range.y {
                         let new_pos = Point {
                             x: res_x,
                             y: high_point.y + dist_y,
@@ -49,7 +49,7 @@ fn find_antinodes_part1(map_range: Point, antenna_locations: &HashSet<Point>) ->
                     }
                 }
                 if right_point.x + dist_x < map_range.x {
-                    if (high_point.y + dist_y < map_range.y) {
+                    if high_point.y + dist_y < map_range.y {
                         let new_pos = Point {
                             x: right_point.x + dist_x,
                             y: high_point.y + dist_y,
@@ -133,7 +133,7 @@ fn solve_part1(
             &locations,
         ));
     }
-    println!("{}", unique_points.len());
+    println!("Part1 solution: {}", unique_points.len());
 }
 
 fn solve_part2(
@@ -151,11 +151,11 @@ fn solve_part2(
             locations,
         ));
     }
-    println!("Total unique antinodes: {}", unique_antinodes.len());
+    println!("Part2 solution: {}", unique_antinodes.len());
 }
 
 fn main() -> io::Result<()> {
-    let input = std::fs::read_to_string("input.log")?;
+    let input = std::fs::read_to_string("input.txt")?;
     let map: Vec<Vec<char>> = input.lines().map(|c| c.chars().collect()).collect();
     let map_height = map.len();
     let map_width = map[0].len();
@@ -165,7 +165,7 @@ fn main() -> io::Result<()> {
         for col in 0..map_width {
             if map[row][col].is_ascii_alphanumeric() {
                 antenna_locations
-                    .entry( map[row][col])
+                    .entry(map[row][col])
                     .or_insert_with(HashSet::new)
                     .insert(Point { x: col, y: row });
             }

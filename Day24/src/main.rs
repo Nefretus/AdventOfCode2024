@@ -77,7 +77,7 @@ fn solve_part1(input: &str) {
         .map(|wire| wire.unwrap() as u8)
         .collect();
 
-    println!("Found decimal number: {:?}", to_u64(&bits));
+    println!("Part1 decimal number: {:?}", to_u64(&bits));
 }
 
 fn format_wire(prefix: &str, num: u32) -> String {
@@ -94,10 +94,8 @@ fn check_z(operations: &HashMap<&str, (&str, &str, &str)>, wire: &str, num: u32)
             wires.sort();
             return wires == [&format_wire("x", 0), &format_wire("y", 0)];
         }
-        return (check_intermediate_xor(operations, x, num)
-            && check_carry(operations, y, num))
-            || (check_intermediate_xor(operations, y, num)
-                && check_carry(operations, x, num));
+        return (check_intermediate_xor(operations, x, num) && check_carry(operations, y, num))
+            || (check_intermediate_xor(operations, y, num) && check_carry(operations, x, num));
     }
     false
 }
@@ -160,10 +158,8 @@ fn check_recarry(operations: &HashMap<&str, (&str, &str, &str)>, wire: &str, num
         if *op != "AND" {
             return false;
         }
-        return (check_intermediate_xor(operations, x, num)
-            && check_carry(operations, y, num))
-            || (check_intermediate_xor(operations, y, num)
-                && check_carry(operations, x, num));
+        return (check_intermediate_xor(operations, x, num) && check_carry(operations, y, num))
+            || (check_intermediate_xor(operations, y, num) && check_carry(operations, x, num));
     }
     false
 }

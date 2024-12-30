@@ -23,6 +23,7 @@ fn solve_part1(mut stones: VecDeque<u64>, iterations: u32) {
                 }
             }
         }
+        
         stones = new_stones;
     }
 

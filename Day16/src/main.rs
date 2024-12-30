@@ -165,9 +165,9 @@ fn main() -> io::Result<()> {
 
     match distance {
         Some(distance) => {
-            println!("Lowest score: {}", distance);
+            println!("Part1 Lowest score: {}", distance);
             println!(
-                "Number of tiles : {}",
+                "Part2 Number of tiles: {}",
                 find_best_path_tiles(&predecessors, end).len()
             );
         }

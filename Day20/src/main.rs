@@ -61,6 +61,7 @@ fn solve_part1(distances: &Vec<Vec<isize>>, grid: &Vec<Vec<char>>) {
             if grid[row][col] == WALL {
                 continue;
             }
+
             for &(dr, dc) in [(-2, 0), (2, 0), (0, 2), (0, -2)].iter() {
                 let new_row = row as isize + dr;
                 let new_col = col as isize + dc;
@@ -82,6 +83,7 @@ fn solve_part1(distances: &Vec<Vec<isize>>, grid: &Vec<Vec<char>>) {
                     }
                 }
             }
+            
         }
     }
 
